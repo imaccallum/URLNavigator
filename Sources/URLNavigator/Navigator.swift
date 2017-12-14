@@ -27,6 +27,7 @@ open class Navigator: NavigatorType {
   open func viewController(for url: URLConvertible, context: Any? = nil) -> UIViewController? {
     let urlPatterns = Array(self.viewControllerFactories.keys)
     guard let match = self.matcher.match(url, from: urlPatterns) else { return nil }
+
     guard let factory = self.viewControllerFactories[match.pattern] else { return nil }
     return factory(url, match.values, context)
   }

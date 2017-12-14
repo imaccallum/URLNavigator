@@ -34,6 +34,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     self.window = window
     self.navigator = navigator
+	
+	enum DeepLink {
+		case login
+		case chat(id: String)
+	}
+	
+	let parser = URLParser<DeepLink>()
+	
+	parser.register("myapp://login") { (pattern, values, context) -> DeepLink? in
+		return .login
+	}
+	
+	parser.register("myapp://chat/<uuid:chatId>") { (pattern, values, context) -> DeepLink? in
+		guard let chatId = values["chatId"] as? UUID else { return nil }
+		return .chat(id: chatId.uuidString)
+	}
+	
+	let deepLink = parser.parse("myapp://login")
+
     return true
   }
 
